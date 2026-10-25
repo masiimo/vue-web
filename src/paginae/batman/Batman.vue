@@ -21,8 +21,16 @@ import { Button } from '@/components/ui/button'
 import { Calendar } from '@/components/ui/calendar'
 import { ref } from 'vue';
 import type { DateValue } from 'reka-ui';
+import { Loader2, Mail, MapPin, Phone, MessageCircle, X, LucideBadgeCheck } from '@lucide/vue';
+import { Icon } from '@iconify/vue';
+import { toast } from 'vue-sonner';
+
 
 const dies = ref<DateValue>()
+const nomen = ref<string>("")
+const cognomen = ref<string>("")
+const missio = ref<string>("")
+const estLoading = ref<boolean>(false)
 
 const photos = ["justice", "arkham", "superman", "varios", "villana", "villano", "grupo", "robin", "anne", "joker", "resplandor", "cat", "gafas", "league", "fondoVerde"]; 
 
@@ -54,6 +62,42 @@ const menuItems = [
   },
 
 ]
+
+const mittereSubmit = async () => {
+  estLoading.value = true
+
+  toast(`Solicitud enviada correctamente
+  - Nombre: ${nomen.value} ${cognomen.value}
+  - Missión: ${missio.value}
+  - Fecha: ${dies.value ? `${dies.value.day}/${dies.value.month}/${dies.value.year}` : 'No especificada'}`, {
+    duration: 4000,
+    position: 'bottom-right',
+    icon: LucideBadgeCheck,
+    style: {
+      background: '#201c3b',
+      color: '#fff',
+      whiteSpace: 'pre-wrap',
+     
+    },
+  }
+  
+  )
+
+  await new Promise((resolve) => setTimeout(resolve, 2000)) // Envio de datos
+  estLoading.value = false
+
+  console.log('Formulario enviado:', {
+    dies: dies.value,
+    nomen: nomen.value,
+    cognomen: cognomen.value,
+    missio: missio.value,
+  })
+
+  nomen.value = ""
+  cognomen.value = ""
+  missio.value = ""
+
+}
 
 </script>
 
@@ -149,19 +193,23 @@ const menuItems = [
 
                 <!-- Formulario -->
           <div class="w-full max-w-md mx-auto lg:max-w-none lg:w-1/2 ">
-            <form  class="space-y-6 bg-white p-8 rounded-lg shadow-lg aspect-square">
+
+            <form
+              class="space-y-6 bg-white p-8 rounded-lg shadow-lg aspect-square"
+              @submit.prevent="mittereSubmit"
+            >
               <div class="space-y-2">
                 <Label for="nomen">Nombre</Label> 
-                <Input id="nomen" required />
+                <Input id="nomen" required v-model="nomen"/>
               </div>
                     
               <div class="space-y-2">
                 <Label for="cognomen">Apellidos</Label> 
-                <Input id="cognomen" required />
+                <Input id="cognomen" required v-model="cognomen"/>
               </div>
 
               <div class="space-y-2">
-                <Select required>
+                <Select required v-model="missio">
                   <SelectTrigger>
                     <SelectValue placeholder="Selecciona una misión" />
                   </SelectTrigger>
@@ -201,11 +249,18 @@ const menuItems = [
                     <Calendar v-model="dies" />
                   </PopoverContent>
                 </Popover>
-
-
               </div>
 
-              Poner un botón para enviar la solicitud
+              <Button
+               type="submit"
+               class="w-full bg-brand-purple hover:bg-brand-purple-dark"
+               :disabled="estLoading"
+              >
+               <Loader2 v-if="estLoading" class="mr-2 h-4 w-4 animate-spin"/>
+               <span v-if="estLoading">Enviando...</span>
+               <span v-else>Enviar solicitud</span>
+               
+              </Button>
                   
             </form>
           </div>
@@ -222,17 +277,17 @@ const menuItems = [
                 
             <div class="space-y-2">
               <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                <Phone class="w.5 h-5" />
                 +1 (555) 123-4567
 
               </p>
               <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                <Mail class="w-5 h-5" />
                 batman@wayneenterprises.com
 
               </p>
               <p class="flex items-center gap-2 justify-center md:justify-start">
-
+                <MapPin class="w-5 h-5" />
                 Wayne Manor, Gotham City
 
               </p>
@@ -244,10 +299,10 @@ const menuItems = [
             <h3 class="text-xl font-bold text-white">Síguenos</h3>
             <div class="flex gap-8 justify-center">
             
-              Icono de X -
-              Icono de Instagram -
-              Icono de Linkedin - 
-              Icono de MessageCircle
+              <X class="w-10 h-10 hover:text-white" />
+              <Icon icon="mdi:instagram" class="w-10 h-10 hover:text-white" />
+              <Icon icon="mdi:linkedin" class="w-10 h-10 hover:text-white" />
+              <MessageCircle class="w-10 h-10 hover:text-white" />
                   
             </div>
         </div>
