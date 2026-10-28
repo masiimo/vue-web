@@ -5,53 +5,53 @@ import Primus from "../paginae/simpsons/Primus.vue";
 import Responsum from "../paginae/responsum/Responsum.vue";
 import Layout from "@/paginae/simpsons/Layout.vue";
 import Circa from "@/paginae/simpsons/Circa.vue";
-import Collectione from "@/paginae/simpsons/Collectione.vue";
 import Character from "@/paginae/simpsons/Character.vue";
+import Collectione from "@/paginae/simpsons/Collectione.vue";
 
 export const router = createRouter({
   history: createWebHashHistory(import.meta.env.BASE_URL),
   routes: [
     {
-      path: "/",
-      name: "home",
+      path: '/',
+      name: 'home',
       component: Domus
     },
     {
-      path: "/batman",
-      name: "batman",
+      path: '/batman',
+      name: 'batman',
       component: Batman
     },
     {
-      path: "/simpsons",
+      path: '/simpsons',
       children: [
         {
-          path: "", // /simpsons/
-          name: "simpsons",
+          path: '', // /simpsons/
+          name: 'simpsons',
           component: Primus
         },
         {
-          path: "about", 
+          path: 'about', 
           component: Layout,
           children: [
             {
-              path: "", // /simpsons/about
-              name: "simpsons-about",
+              path: '', 
+              name: 'simpsons-about',
               component: Circa
             }
           ]
         },
         {
-          path: "gallery", 
+          path: 'gallery', 
           component: Layout,
           children: [
             {
-              path: "", // /simpsons/gallery
-              name: "simpsons-characters",
+              path: '', 
+              name: 'simpsons-characters',
               component: Collectione
             },
             {
-              path: ":id", // /simpsons/gallery/23
-              name: "simpsons-characters",
+              path: ':id', 
+              name: 'simpsons-character',
               component: Character
             }
           ]
@@ -60,8 +60,8 @@ export const router = createRouter({
       
     },
     {
-      path: "/indecision",
-      name: "indecision",
+      path: '/indecision',
+      name: 'indecision',
       component: Responsum
     },
     {

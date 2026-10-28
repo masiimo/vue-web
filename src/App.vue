@@ -5,8 +5,9 @@ import 'vue-sonner/style.css'
 </script>
 
 <template>
-  <main>
-    <RouterView />
-    <SonnerToaster />
-  </main>
+
+  <RouterView />
+  
+  <SonnerToaster />
+
 </template>
